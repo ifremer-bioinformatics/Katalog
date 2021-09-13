@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  <title>Bioinformatics references databank and sequences</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+  <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v2.0.8/dist/clipboard.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="./js/d3.4.2.6.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./js/keshif.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./helpin/helpin_material.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./helpin/helpin.js" charset="utf-8"></script>
+
+  <script type="text/javascript" src="./js/papaparse.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./js/databank.js" charset="utf-8"></script>
+
+  <link rel="stylesheet" href="./css/keshif.css"/ type="text/css">
+  <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./helpin/helpin.css" type="text/css">
+
+  <link rel="stylesheet" href="./css/software_browser.css" type="text/css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+  <script type="text/javascript">
+
+
+  google.charts.setOnLoadCallback(function(){
+    browser = new kshf.Browser({
+    domID: "#Software_Browser",
+    barChartWidth: 160,
+    leftPanelLabelWidth: 150,
+    recordName: "databanks",
+    rightPanelLabelWidth: 90,
+    source: {
+      dirPath: "./",
+      fileType: 'csv',
+              // note that using 'dirPath' and 'fileType' are only relevant
+              //   for solutions 2 and 3; see Keshif doc for more details
+              //   (https://github.com/adilyalcin/Keshif/wiki/Docs:-Loading-Data).
+
+			  //Name of data table containing list of softwares
+      tables: "Databank"
+      },
+     summaries: [
+       { name: "Category"},
+       { name: "Omics", catSplit : ","},
+       { name: "Type", catSplit : ","},
+       { name: "Provider", catSplit : ","},
+       { name: "Index", catSplit : ",", value: "Tools"},
+     ],
+     recordDisplay: {
+       sortColWidth: 45,
+       //sortBy: { title: 'id',  inverse: true },
+       textSearch: "DB_name",
+       detailsToggle: "one",
+       recordView: function() {
+         var str="";
+         str+="<div class=''>";
+         str+=this.DB_name;
+         if(this.Path!=="" && this.Path!==null){
+           str+=clipboard(this.Path, 'Path');
+         }
+         if(this.Tools!=="" && this.Tools!==null){
+           str+=indexClipboard(this.Tools, this.Tools_path);
+         }
+         str+="</div>";
+         str+="<span class='item_details'>";
+         str+="<div class='topicsbold'>";
+         str+=this.Description;
+         str+="</div>";
+         str+=formatSimpleTopics("Provider", this.Provider);
+         str+=formatSimpleTopics("Release", this.Release_date);
+         str+=formatSimpleTopics("Format", this.Type);
+         str+=formatSimpleTopics("Omics data", this.Omics);
+         if(this.Tools!=="" && this.Tools!==null){
+           str+=formatSimpleTopics("Index for", this.Tools);
+         }
+         str+=formatSimpleTopics("Path", this.Path);
+         str+="</div>";
+         str+="</span>";
+         return str;
+       }
+    }
+   });
+   });
+  </script>
+  </head>
+  <body>
+    <div class="contents">
+      <div id="Software_Browser"></div>
+    </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8">
+      <h3>Using badges: how to?</h3>
+      <p>Badges, displayed next to each databank name, can be used as follows:</p>
+      <p>
+    <ul>
+    <li>Click on <span id='path_btn'></span> to copy to clipboard DATAREF path to the databank;</li>
+    <li>Click on <span id='blast_btn'></span> to copy to clipboard path to the databank to be used with BLAST tool (-db argument);</li>
+    <li>Click on <span id='hsat_btn'></span> to copy to clipboard DATAREF path to the databank to be used with Hisat2 tool;</li>
+    <li>Click on <span id='btie_btn'></span> to copy to clipboard DATAREF path to the databank to be used with Bowtie2 tool;</li>
+    <li>Click on <span id='bdm_btn'></span> to copy to clipboard DATAREF path to the databank to be used with BeeDeeM Annotator tool (e.g. see ORSON pipeline).</li>
+    </ul>
+      </p>
+    </div>
+<script type="text/javascript">
+document.getElementById("path_btn").innerHTML=getButtonCode("n/a","Path");
+document.getElementById("blast_btn").innerHTML=getButtonCode("n/a","BLAST");
+document.getElementById("bdm_btn").innerHTML=getButtonCode("n/a","BDM-ANNOT");
+document.getElementById("hsat_btn").innerHTML=getButtonCode("n/a","HISAT2");
+document.getElementById("btie_btn").innerHTML=getButtonCode("n/a","BOWTIE2");
+</script>
+
+  </body>
+</html>
