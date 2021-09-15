@@ -11,7 +11,7 @@
   <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v2.0.8/dist/clipboard.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="./js/d3.4.2.6.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="./js/keshif.js" charset="utf-8"></script>
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="./helpin/helpin.css" type="text/css">
 
   <link rel="stylesheet" href="./css/software_browser.css" type="text/css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
 
   <script type="text/javascript">
@@ -42,11 +42,6 @@
     source: {
       dirPath: "./",
       fileType: 'csv',
-              // note that using 'dirPath' and 'fileType' are only relevant
-              //   for solutions 2 and 3; see Keshif doc for more details
-              //   (https://github.com/adilyalcin/Keshif/wiki/Docs:-Loading-Data).
-
-			  //Name of data table containing list of softwares
       tables: "Databank"
       },
      summaries: [
@@ -58,7 +53,7 @@
      ],
      recordDisplay: {
        sortColWidth: 45,
-       //sortBy: { title: 'id',  inverse: true },
+       sortBy: { title: 'id',  inverse: true },
        textSearch: "DB_name",
        detailsToggle: "one",
        recordView: function() {
@@ -66,7 +61,7 @@
          str+="<div class=''>";
          str+=this.DB_name;
          if(this.Path!=="" && this.Path!==null){
-           str+=clipboard(this.Path, 'Path');
+           str+=clipboard(this.Path, 'DATAREF');
          }
          if(this.Tools!=="" && this.Tools!==null){
            str+=indexClipboard(this.Tools, this.Tools_path);
@@ -94,15 +89,23 @@
   </script>
   </head>
   <body>
-    <div class="contents">
+    <div class="alert alert-info" >
+      <h3>Bioinformatics databanks</h3>
+      <p class="lead">Find here databanks managed by SeBiMER. They mostly consist in public banks, genomes, SRA, etc.</p>
+    </div>
+    <div class="contents" style="margin-left: 10px;">
       <div id="Software_Browser"></div>
     </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-8">
-      <h3>Using badges: how to?</h3>
-      <p>Badges, displayed next to each databank name, can be used as follows:</p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Help</h3>
+  </div>
+  <div class="panel-body">
+      <h3 class="mt-5">You do not find a databank of interest?</h3>
+      <p class="lead"><a href="https://w3z.ifremer.fr/bioinfo/Galaxy-Datarmor/Ressources-disponibles/Demande-d-ajout-d-une-banque-de-sequences">Click here</a> to request a new databank installation.</p>
+      <h3 class="mt-5">Using badges: how to?</h3>
+      <p class="lead">Badges, displayed next to each databank name, can be used as follows:</p>
       <p>
     <ul>
     <li>Click on <span id='path_btn'></span> to copy to clipboard DATAREF path to the databank;</li>
@@ -113,8 +116,9 @@
     </ul>
       </p>
     </div>
+</div>
 <script type="text/javascript">
-document.getElementById("path_btn").innerHTML=getButtonCode("n/a","Path");
+document.getElementById("path_btn").innerHTML=getButtonCode("n/a","DATAREF");
 document.getElementById("blast_btn").innerHTML=getButtonCode("n/a","BLAST");
 document.getElementById("bdm_btn").innerHTML=getButtonCode("n/a","BDM-ANNOT");
 document.getElementById("hsat_btn").innerHTML=getButtonCode("n/a","HISAT2");
