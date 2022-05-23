@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Bioinformatics software list available on DATARMOR</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="./js/d3.4.2.6.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./js/keshif.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./helpin/helpin_material.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./helpin/helpin.js" charset="utf-8"></script>
+
+  <script type="text/javascript" src="./js/papaparse.min.js" charset="utf-8"></script>
+
+  <link rel="stylesheet" href="./css/keshif.css"/ type="text/css">
+  <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./helpin/helpin.css" type="text/css">
+
+  <link rel="stylesheet" href="./css/software_browser.css" type="text/css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+
+  <script type="text/javascript">
+
+    //
+    var socialShare = false, demoHeader = false;
+    //
+
+    function formatToolName(toolName){
+      var idx=toolName.lastIndexOf("-");
+      var str="<span class='toolName'>";
+      if (idx<0){
+        return str+toolName+"</span> ";
+      }
+      str+=toolName.substring(0,idx).trim();
+      str+="</span> - <span class='toolVersion'>";
+      str+=toolName.substring(idx+1).trim();
+      str+="</span> ";
+      return str;
+    }
+    function formatCmdLine(appPath, toolName){
+      var str="Cmd-line </span><span class='topicsstd'>(";
+      str+=appPath;
+      str+=")</span>";
+      return str;
+    }
+    function formatVersions(versionClass, versionName){
+      var str="<div><span class='topics topicsbold'>";
+      str+=versionClass;
+      str+=":</span><span class='topics'>";
+      str+="<br>";
+      str+="<ul>";
+      var a = versionName.split(","), i;
+      for (i = 0; i < a.length; i++) {
+        str+="<li>";
+	var b = a[i].split("-");
+	if (b[1] == 'conda'){
+        	str+=b[0]+" - <img src=https://upload.wikimedia.org/wikipedia/commons/e/ea/Conda_logo.svg height=12 >"
+	} else if (b[1] == 'docker'){
+		str+=b[0]+" - <img src=https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png height=12 >"
+	} else if (b[1] == 'singularity'){
+		str+=b[0]+" - <img src=https://sylabs.io/wp-content/uploads/2022/03/singularity-logo-round.svg height=12 >"
+	} else if (b[1] == 'Nextflow'){
+		str+=b[0]+" - <img src=https://upload.wikimedia.org/wikipedia/commons/6/60/Nextflow_logo.png height=12 >"
+	} else if (b[1] == 'Snakemake'){
+		str+=b[0]+" - <img src=https://upload.wikimedia.org/wikipedia/commons/c/c7/Snakemake_logo_dark.png height=12 >"
+	} else {
+		str+=b[0]+" - <img src=https://upload.wikimedia.org/wikipedia/commons/8/82/Gnu-bash-logo.svg height=12 >"
+	}
+        str+="</li>";
+      }
+      str+="</ul>";
+      str+="</span></div>";
+      return str;
+    }
+    function formatSimpleTopics(topicClass, topicName){
+      var str="<div><span class='topics topicsbold'>";
+      str+=topicClass;
+      str+=": </span><span class='topics'>";
+      str+=topicName;
+      str+="</span></div>";
+      return str;
+    }
+    google.charts.setOnLoadCallback(function(){
+      browser = new kshf.Browser({
+        domID: "#Software_Browser",
+        barChartWidth: 160,
+        leftPanelLabelWidth: 150,
+        recordName: "softwares",
+        rightPanelLabelWidth: 90,
+        source: {
+          //Three possible solutions to load a data file:
+          // solution 1: using Google Docs, e.g.:
+          //gdocId: '1Kf3WkhhhnUn9hclYh2erI6tSpiLgLum5mYtOO_3rxnQ',
+
+          // solution 2: using a URL, e.g.:
+          //dirPath: "http://localhost/~ifremer/ToolDirectory/test/",
+
+          // solution 3: using a relative path (to this script), e.g.:
+          dirPath: "./",
+          fileType: 'csv',
+          // note that using 'dirPath' and 'fileType' are only relevant
+          //   for solutions 2 and 3; see Keshif doc for more details
+          //   (https://github.com/adilyalcin/Keshif/wiki/Docs:-Loading-Data).
+
+          //Name of data table containing list of softwares
+          tables: "Softwares"
+        },
+        summaries: [
+          { name: "Topic", catSplit : ","},
+          { name: "Operation", catSplit : ","},
+          { name: "Environment", catSplit : ","},
+          { name: "Galaxy"},
+        ],
+        recordDisplay: {
+          sortColWidth: 45,
+          sortBy: { title: 'id', inverse: true },
+          textSearch: "Name",
+          detailsToggle: "one",
+          recordView: function() {
+            // console.log(Object.values(this));
+            var appliPathPrefix = "DATARMOR:";
+            var str="";
+            str+="<div class=''>";
+            str+=formatToolName(this.Name);
+            str+="<a class='pubLink fa fa-external-link externallink' target='_blank' href='";
+            str+=this.Doc;
+            str+="'>   Documentation</a>";
+            str+="</div>";
+            str+="<span class='item_details'>";
+            str+="<div class='topicsbold'>";
+            str+=this.Description;
+            str+="</div>";
+            str+=formatSimpleTopics("Category", this.Operation);
+            str+=formatSimpleTopics("Topic", this.Topic);
+            str+=formatVersions("Versions", String(this.Version));
+            return str;
+          }
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="alert alert-info" >
+  <h3>Bioinformatics softwares</h3>
+  <p class="lead">Find here softwares available on DATARMOR cluster to carried out bioinformatics data processing.</p>
+</div>
+<div class="contents" style="margin-left: 10px;">
+  <div id="Software_Browser"></div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Help</h3>
+    </div>
+    <div class="panel-body">
+      <h3 class="mt-5">You do not find a software of interest?</h3>
+      <p class="lead"><a href="https://abims.sb-roscoff.fr/contact">Click here</a> to request a new software installation.</p>
+    </div>
+  </div>
+  <div id="Infobox"> Data compiled from DATARMOR /appli/bioinfo/ |
+    Topic and Operation rely on <a href="http://ifb-elixirfr.github.io/edam-browser" target="_blank">EDAM ontology</a> |
+    <span class="fa fa-github"></span> Made with
+    <a href="https://github.com/ifremer-bioinformatics/ToolDirectory" target="_blank">ToolDirectory</a> </div>
+</div>
+</body>
+</html>
