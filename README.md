@@ -17,8 +17,8 @@ This repository contains the Katalog library aims at displaying list of software
 Katalog is basically a web-based application. It can be installed and tested quite easily as follows:
 
 ```
-cd /a/path/visible/to/a/web/server
-git clone \<Katalog-project\> ToolDirectory
+cd /a/path/visible/through/a/web/server
+git clone https://github.com/ifremer-bioinformatics/Katalog.git ToolDirectory
 cd ToolDirectory
 cp examples/Ifremer-ToolDirectory-index.html ./index.html
 cp exemples/Ifremer-Softwares.csv ./Software.html
