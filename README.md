@@ -1,6 +1,6 @@
 ## Introduction
 
-This reposiroty contains the Katalog library aims at displaying list of softwares using facetted data visualization system. 
+This repository contains the Katalog library aims at displaying list of softwares using facetted data visualization system. 
 
 Bioinformatics tool management is a crucial task for bioinformatics platforms to have a comprehensive view of all tools available on an infrastructure. It should enable administrators and users to easily navigate through the tool catalog and save time finding appropriate tools. This requires maintaining a list of softwares in a simple and automatic way after a new installation. In addition, in order to allow end-users to quickly find a tool that fits their needs, it must allow a description and a categorization of each software by the use of various metadata.  The latter will improve software classification and allow search and navigation via other criteria, such as the packaging of the tool (compiled source code, Conda package, Singularity image, etc.), the operations allowed by the tool (assembly, search for sequence similarity, mapping, etc.) or the life science subject (sequence assembly, sequence analysis, epigenetics, phylogenetics).
 
